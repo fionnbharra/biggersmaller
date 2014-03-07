@@ -40,6 +40,10 @@ module.exports = function (grunt) {
                 files: ['test/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
             },
+            compass: {
+                files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+                tasks: ['compass']
+            },
             livereload: {
                 options: {
                     livereload: LIVERELOAD_PORT
@@ -68,7 +72,7 @@ module.exports = function (grunt) {
             options: {
                 port: SERVER_PORT,
                 // change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
+                hostname: '0.0.0.0'
             },
             livereload: {
                 options: {
@@ -158,6 +162,23 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        compass: {
+            options: {
+                sassDir: '<%= yeoman.app %>/styles',
+                cssDir: '.tmp/styles',
+                imagesDir: '<%= yeoman.app %>/images',
+                javascriptsDir: '<%= yeoman.app %>/scripts',
+                fontsDir: '<%= yeoman.app %>/styles/fonts',
+                importPath: '<%= yeoman.app %>/bower_components',
+                relativeAssets: true
+            },
+            dist: {},
+            server: {
+                options: {
+                    debugInfo: true
+                }
+            }
+        },
         // not enabled since usemin task does concat and uglify
         // check index.html to edit your build targets
         // enable this task if you prefer defining your build targets here
@@ -230,6 +251,7 @@ module.exports = function (grunt) {
                         '.htaccess',
                         'images/{,*/}*.{webp,gif}',
                         'styles/fonts/{,*/}*.*',
+                        'bower_components/sass-bootstrap/fonts/*.*'
                     ]
                 }]
             }
@@ -249,6 +271,7 @@ module.exports = function (grunt) {
                         '<%= yeoman.dist %>/styles/{,*/}*.css',
                         '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
                         '/styles/fonts/{,*/}*.*',
+                        'bower_components/sass-bootstrap/fonts/*.*'
                     ]
                 }
             }
@@ -275,6 +298,7 @@ module.exports = function (grunt) {
                 'coffee',
                 'createDefaultTemplate',
                 'jst',
+                'compass:server',
                 'connect:test',
                 'open:test',
                 'watch:livereload'
@@ -286,6 +310,7 @@ module.exports = function (grunt) {
             'coffee:dist',
             'createDefaultTemplate',
             'jst',
+            'compass:server',
             'connect:livereload',
             'open:server',
             'watch'
@@ -299,11 +324,12 @@ module.exports = function (grunt) {
                 'coffee',
                 'createDefaultTemplate',
                 'jst',
+                'compass',
                 'connect:test',
                 'mocha',
                 'watch:test'
             ];
-            
+
         if(!isConnected) {
             return grunt.task.run(testTasks);
         } else {
@@ -318,6 +344,7 @@ module.exports = function (grunt) {
         'coffee',
         'createDefaultTemplate',
         'jst',
+        'compass:dist',
         'useminPrepare',
         'imagemin',
         'htmlmin',

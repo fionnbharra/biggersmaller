@@ -1,0 +1,86 @@
+@import "compass/css3";
+@import "colors";
+@import "transitions";
+@import "layout";
+
+
+
+
+body {
+  background-color: red;
+}
+
+h1 {
+    font-family: 'oswald', serif;
+    line-height: 1;
+    font-size: 60px;
+    margin: 0 0 23px 0;
+    color:$red;
+    text-align: center;
+    }
+p, body {
+    font-family: 'droid serif', cursive;
+    text-align: center;
+    font-size: 30px;
+    margin: 0 0 43px 0;
+    color:$maroon;
+
+    }
+    body {
+      margin-bottom: 0;
+      background-color: $olive;
+    }
+    button {
+      box-sizing: border-box;
+      position:relative;
+      background:$red;
+      border:1px solid white;
+      padding:20px;
+      font-size:0.9em;
+      color:white;
+      font-weight:700;
+      letter-spacing:5px;
+      display: block;
+      width: 100%;
+      text-transform:uppercase;
+    }
+
+span.or {
+  font-family: 'oswald', serif;
+  color: white;
+  font-size: 15px;
+  height: 50px;
+  margin-top: 22px;
+  display: block;
+}
+.countdownbar{
+  position: fixed;
+  bottom: 0;
+  display: block;
+  width: 100%;
+  height: 20px;
+  color: $red;
+  background-color: $red;
+
+}
+
+
+
+
+.countdownbar.running {
+  @include transition(all .75s ease-in);
+  width: 0;
+
+  &.interrupt {
+    width: 100%;
+    @include transition(none);
+  }
+}
+
+
+
+
+button.test {
+  position: absolute;
+  bottom: 50px;
+}
