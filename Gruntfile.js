@@ -273,6 +273,12 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        'gh-pages': {
+          options: {
+            base: 'dist'
+          },
+          src: ['**']
         }
     });
 
@@ -358,5 +364,10 @@ module.exports = function (grunt) {
         'jshint',
         'test',
         'build'
+    ]);
+
+    grunt.registerTask('deploy', [
+        'build',
+        'gh-pages'
     ]);
 };
