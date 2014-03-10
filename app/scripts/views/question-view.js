@@ -1,55 +1,50 @@
-/*global BiggerSmaller, Backbone, JST*/
-
+/*global BiggerSmaller, Backbone, JST, pubSub*/
+'use strict';
 BiggerSmaller.Views.QuestionView = Backbone.View.extend({
 
-    template: JST['app/scripts/templates/question.ejs'],
-    
-    events: {
-      "click .animal": "determineResult"
-    },
+  template: JST['app/scripts/templates/question.ejs'],
 
-    index: 0,
+  events: {
+    'click .animal': 'determineResult'
+  },
 
-    initialize: function () {
-      this.index = this.options.index;
-      var self = this;
+  index: 0,
 
-      pubSub.on("question:correctAnswer", function(ev) {
-        if(ev.questionIndex != self.index){
-          self.render();
-        }
-      } );
-      this.render();
-      
-    },
+  initialize: function () {
+    this.index = this.options.index;
+    var self = this;
 
-    render: function(){
-      var animals = this.collection.getTwoAnimals();
-      this.$el.html(this.template({ animals: animals }));
-    },
-
-    clickedRightAnswer: function(div){
-      var $clickedDiv = $(div);
-      var chosenAnswerSize = $clickedDiv.data().size;
-      var otherSize = this.$el.find('.animal').not($clickedDiv).data().size;
-      if(chosenAnswerSize > otherSize){
-        return true;
+    pubSub.on('question:correctAnswer', function(ev) {
+      if(ev.questionIndex !== self.index){
+        self.render();
       }
-      return false;
-    },
+    } );
+    this.render();
 
-    determineResult: function(ev){
-      if(this.clickedRightAnswer(ev.currentTarget)){
-        pubSub.trigger("pageManager:nextQuestion");
-        pubSub.trigger("question:correctAnswer", { questionIndex: this.index });
-      } else {
-        pubSub.trigger("gameOver:wrongAnswer");
-        BiggerSmaller.app.navigate('gameover', {trigger: true});
-      }
-    },
+  },
 
+  render: function(){
+    var animals = this.collection.getTwoAnimals();
+    this.$el.html(this.template({ animals: animals }));
+  },
 
+  clickedRightAnswer: function(div){
+    var $clickedDiv = $(div);
+    var chosenAnswerSize = $clickedDiv.data().size;
+    var otherSize = this.$el.find('.animal').not($clickedDiv).data().size;
+    if(chosenAnswerSize > otherSize){
+      return true;
+    }
+    return false;
+  },
 
-
-
+  determineResult: function(ev){
+    if(this.clickedRightAnswer(ev.currentTarget)){
+      pubSub.trigger('pageManager:nextQuestion');
+      pubSub.trigger('question:correctAnswer', { questionIndex: this.index });
+    } else {
+      pubSub.trigger('gameOver:wrongAnswer');
+      BiggerSmaller.app.navigate('gameover', {trigger: true});
+    }
+  },
 });

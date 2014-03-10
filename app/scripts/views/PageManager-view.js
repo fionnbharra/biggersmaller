@@ -1,5 +1,5 @@
 /*global BiggerSmaller, Backbone, JST*/
-
+'use strict';
 BiggerSmaller.Views.PageManagerView = Backbone.View.extend({
 
     el: '#main',
@@ -10,7 +10,7 @@ BiggerSmaller.Views.PageManagerView = Backbone.View.extend({
     isAnimating: false,
     endCurrPage: false,
     endNextPage: false,
-  
+
     animEndEventNames: {
       'WebkitAnimation' : 'webkitAnimationEnd',
       'OAnimation' : 'oAnimationEnd',
@@ -44,23 +44,23 @@ BiggerSmaller.Views.PageManagerView = Backbone.View.extend({
     setListeners: function () {
       var self = this;
 
-      pubSub.on("pageManager:nextQuestion", function(ev){
-        self.nextQuestion()
-      });
-      
-      pubSub.on("pageManager:startGame", function(ev){
-        self.startGame()
+      pubSub.on('pageManager:nextQuestion', function(ev){
+        self.nextQuestion();
       });
 
-      pubSub.on("pageManager:welcome", function(ev){
-        self.showWelcome()
+      pubSub.on('pageManager:startGame', function(ev){
+        self.startGame();
       });
 
-      pubSub.on("pageManager:gameOver", function(ev){
-        self.showGameOver()
+      pubSub.on('pageManager:welcome', function(ev){
+        self.showWelcome();
       });
 
-    },    
+      pubSub.on('pageManager:gameOver', function(ev){
+        self.showGameOver();
+      });
+
+    },
 
     setPages: function(){
       this.$pages = this.$el.children( 'div.screen' );
@@ -81,14 +81,14 @@ BiggerSmaller.Views.PageManagerView = Backbone.View.extend({
     },
 
     showGameOver: function(){
-      this.nextPage( 3 );  
+      this.nextPage( 3 );
     },
 
     nextQuestion: function(){
-      if(this.current == 2 ){
-        this.nextPage( 1 );  
+      if(this.current === 2 ){
+        this.nextPage( 1 );
       } else {
-        this.nextPage(  );  
+        this.nextPage(  );
       }
     },
 
@@ -104,7 +104,7 @@ BiggerSmaller.Views.PageManagerView = Backbone.View.extend({
       var animation = Math.floor(Math.random() * 67) + 1;
 
       self.isAnimating = true;
-      
+
       var $currPage = self.$pages.eq( self.current );
 
       if(targetPage > 0){
@@ -124,7 +124,6 @@ BiggerSmaller.Views.PageManagerView = Backbone.View.extend({
         outClass = '', inClass = '';
 
       switch( animation ) {
-
         case 1:
           outClass = 'pt-page-moveToLeft';
           inClass = 'pt-page-moveFromRight';
@@ -406,7 +405,7 @@ BiggerSmaller.Views.PageManagerView = Backbone.View.extend({
         }
       } );
 
-    
+
       $nextPage.addClass( inClass ).on( this.animEndEventName, function() {
         $nextPage.off( self.animEndEventName );
         self.endNextPage = true;
@@ -426,7 +425,7 @@ BiggerSmaller.Views.PageManagerView = Backbone.View.extend({
       this.endNextPage = false;
       this.resetPage( $outpage, $inpage );
       this.isAnimating = false;
-      pubSub.trigger("pageAnimation:complete", {foo: true});
+      pubSub.trigger('pageAnimation:complete', {foo: true});
     },
 
     resetPage: function( $outpage, $inpage ) {

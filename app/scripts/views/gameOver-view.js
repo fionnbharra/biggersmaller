@@ -1,13 +1,13 @@
 /*global BiggerSmaller, Backbone, JST*/
-
+'use strict';
 BiggerSmaller.Views.GameOverView = Backbone.View.extend({
 
     template: JST['app/scripts/templates/gameOver.ejs'],
-    el: "#gameover",
+    el: '#gameover',
     self: null,
 
     events: {
-      "click button": "restart"
+      'click button': 'restart'
     },
 
     initialize: function () {
@@ -29,18 +29,17 @@ BiggerSmaller.Views.GameOverView = Backbone.View.extend({
     },
 
     setListeners: function(){
-      var self = this;
       var $outOfTimeMessage = this.$el.find('#out-of-time');
       var $wrongAnswerMessage = this.$el.find('#wrong-answer');
 
       $outOfTimeMessage.addClass('hidden');
 
-      pubSub.on("gameOver:wrongAnswer", function(){
+      pubSub.on('gameOver:wrongAnswer', function(){
         $outOfTimeMessage.addClass('hidden');
         $wrongAnswerMessage.removeClass('hidden');
       });
 
-      pubSub.on("gameOver:timer", function(){
+      pubSub.on('gameOver:timer', function(){
         $outOfTimeMessage.removeClass('hidden');
         $wrongAnswerMessage.addClass('hidden');
       });
