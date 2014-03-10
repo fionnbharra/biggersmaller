@@ -2,14 +2,14 @@
 
 BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
-    template: JST['app/scripts/templates/timer.ejs'], 
+    template: JST['app/scripts/templates/timer.ejs'],
 
     el: '#timer',
 
     transitionEndEventNames: {
       'WebkitTransition' : 'webkitTransitionEnd',
-      'OTransition' : 'oTransitionEnd', // this is a guess, I have no idea what the Opera version is. 
-      'msTransition' : 'MSTransitionEnd', // this is a guess, I have no idea what the MS version is. 
+      'OTransition' : 'oTransitionEnd', // this is a guess, I have no idea what the Opera version is.
+      'msTransition' : 'MSTransitionEnd', // this is a guess, I have no idea what the MS version is.
       'transition' : 'transitionend'
     },
 
@@ -31,7 +31,7 @@ BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
     },
 
-    setListeners: function (){      
+    setListeners: function (){
 
       var self = this;
 
@@ -59,10 +59,10 @@ BiggerSmaller.Views.TimerView = Backbone.View.extend({
       });
 
       this.$el.on( this.transitionEndEventName, function(){
-        
-        pubSub.trigger("gameOver:timer");
 
-        BiggerSmaller.app.navigate('gameover', {trigger: true});
+        // pubSub.trigger("gameOver:timer");
+
+        // BiggerSmaller.app.navigate('gameover', {trigger: true});
       });
 
     }

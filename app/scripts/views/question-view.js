@@ -14,6 +14,8 @@ BiggerSmaller.Views.QuestionView = Backbone.View.extend({
     this.index = this.options.index;
     var self = this;
 
+
+
     pubSub.on('question:correctAnswer', function(ev) {
       if(ev.questionIndex !== self.index){
         self.render();
@@ -26,6 +28,18 @@ BiggerSmaller.Views.QuestionView = Backbone.View.extend({
   render: function(){
     var animals = this.collection.getTwoAnimals();
     this.$el.html(this.template({ animals: animals }));
+    this.setButtonSize();
+
+  },
+
+  setButtonSize: function(){
+
+    if($('.screen').height() > 400){
+      return;
+    }
+    var availableSpace = $('.screen').height() - $('.or').outerHeight(true) - $('.countdownbar').outerHeight(true) - 15;
+    $('.animal').height(availableSpace/2);
+    $('.animal').css('padding', '0');
   },
 
   clickedRightAnswer: function(div){
