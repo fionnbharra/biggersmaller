@@ -60,9 +60,9 @@ BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
       this.$el.on( this.transitionEndEventName, function(){
 
-        // pubSub.trigger("gameOver:timer");
+        pubSub.trigger("gameOver:timer");
 
-        // BiggerSmaller.app.navigate('gameover', {trigger: true});
+        BiggerSmaller.app.navigate('gameover', {trigger: true});
       });
 
     }
