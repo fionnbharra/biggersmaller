@@ -3,11 +3,11 @@
 (function () {
     'use strict';
 
-    describe('Give it some context', function () {
-        describe('maybe a bit more context here', function () {
-            it('should run here few assertions', function () {
 
-            });
-        });
-    });
+    describe('Array', function(){
+      describe('#indexOf()', function(){
+        it('should be eqaul to nine', function(){
+          expect(4+5).equal(9);        })
+      })
+    })
 })();
