@@ -8,6 +8,9 @@ BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
     allowAnimation: true,
 
+    initialTime: 5000,
+    minimumTime: 750,
+
     transitionEndEventNames: {
       'WebkitTransition' : 'webkitTransitionEnd',
       'OTransition' : 'oTransitionEnd', // this is a guess, I have no idea what the Opera version is.
@@ -69,10 +72,17 @@ BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
     },
 
+    getTimer: function(){
+      var reducedTime = this.initialTime * (1-(this.model.get('score')*.1));
+      return Math.max(reducedTime,this.minimumTime);
+    },
+
     startTimer: function () {
+      var self = this;
+
       this.$el.animate({
         width: 0,
-      }, 750, function() {
+      }, self.getTimer(), function() {
         pubSub.trigger("gameOver:timer");
         BiggerSmaller.app.navigate('gameover', {trigger: true});
       });

@@ -12,7 +12,7 @@ BiggerSmaller.Routers.AppRouter = Backbone.Router.extend({
     pubSub.trigger("pageManager:startGame");
     if(!this.question1View){
       var qm = new BiggerSmaller.Collections.QuestionsCollection(questionsData);
-      this.timerView = new BiggerSmaller.Views.TimerView();
+      this.timerView = new BiggerSmaller.Views.TimerView({model: BiggerSmaller.user});
       this.question1View = new BiggerSmaller.Views.QuestionView({collection:qm, el: '#question1', index: 1});
       this.question2View = new BiggerSmaller.Views.QuestionView({collection:qm, el: '#question2', index: 2});
     }
