@@ -1,10 +1,12 @@
-/*global BiggerSmaller, Backbone, JST*/
+/*global BiggerSmaller, Backbone, JST, pubSub*/
 
 BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
     template: JST['app/scripts/templates/timer.ejs'],
 
     el: '#timer',
+
+    allowAnimation: true,
 
     transitionEndEventNames: {
       'WebkitTransition' : 'webkitTransitionEnd',
@@ -35,36 +37,57 @@ BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
       var self = this;
 
-      pubSub.on("pageManager:startGame", function(ev){
-        self.$el.removeClass('running')
-        self.$el.removeClass('interrupt')
+      pubSub.on('pageManager:startGame', function(){
+        self.allowAnimation = true;
+        self.stopTimer();
+        self.resetTimer();
       });
 
-      pubSub.on("pageAnimation:complete", function() {
-        self.$el.addClass('running')
+      pubSub.on('pageAnimation:complete', function() {
+        if(self.allowAnimation){
+          self.startTimer();
+        }
       });
 
-      pubSub.on("question:correctAnswer", function(ev) {
-        self.$el.removeClass('running')
+      pubSub.on('question:correctAnswer', function() {
+          self.stopTimer();
+          self.resetTimer();
       });
 
-      pubSub.on("gameOver:wrongAnswer", function(){
-        self.$el.removeClass('running')
-        self.$el.addClass('interrupt')
+      pubSub.on('gameOver:wrongAnswer', function(){
+        self.allowAnimation = false;
+        self.stopTimer();
+        self.resetTimer();
+
       });
 
-      pubSub.on("gameOver:timer", function(){
-        self.$el.removeClass('running')
-        self.$el.addClass('interrupt')
+      pubSub.on('gameOver:timer', function(){
+        self.allowAnimation = false;
+        self.stopTimer();
+        self.resetTimer();
       });
 
-      this.$el.on( this.transitionEndEventName, function(){
+    },
 
+    startTimer: function () {
+      this.$el.animate({
+        width: 0,
+      }, 750, function() {
         pubSub.trigger("gameOver:timer");
-
         BiggerSmaller.app.navigate('gameover', {trigger: true});
       });
+    },
 
+    resetTimer: function () {
+      this.$el.animate({
+        width: '100%',
+      }, 0, function() {
+
+      });
+    },
+
+    stopTimer: function(){
+      this.$el.stop();
     }
 
 });
