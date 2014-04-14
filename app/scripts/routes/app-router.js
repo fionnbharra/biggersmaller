@@ -1,7 +1,7 @@
 /*global BiggerSmaller, Backbone*/
 
 BiggerSmaller.Routers.AppRouter = Backbone.Router.extend({
-  
+
   routes:{
       "":"welcome",
       "game":"game",
