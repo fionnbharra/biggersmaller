@@ -12,7 +12,6 @@ BiggerSmaller.Views.GameOverView = Backbone.View.extend({
 
     initialize: function () {
       this.render();
-      this.model.on('change', this.updateScore, this);
       this.setListeners();
     },
 
@@ -31,15 +30,18 @@ BiggerSmaller.Views.GameOverView = Backbone.View.extend({
     setListeners: function(){
       var $outOfTimeMessage = this.$el.find('#out-of-time');
       var $wrongAnswerMessage = this.$el.find('#wrong-answer');
+      var self = this;
 
       $outOfTimeMessage.addClass('hidden');
 
       pubSub.on('gameOver:wrongAnswer', function(){
+        self.updateScore();
         $outOfTimeMessage.addClass('hidden');
         $wrongAnswerMessage.removeClass('hidden');
       });
 
       pubSub.on('gameOver:timer', function(){
+        self.updateScore();
         $outOfTimeMessage.removeClass('hidden');
         $wrongAnswerMessage.addClass('hidden');
       });
