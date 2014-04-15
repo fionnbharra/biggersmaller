@@ -1,5 +1,5 @@
-/*global BiggerSmaller, Backbone, JST, pubSub*/
-
+/*global BiggerSmaller, Backbone, JST, pubSub, Modernizr*/
+"use strict";
 BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
     template: JST['app/scripts/templates/timer.ejs'],
@@ -8,8 +8,8 @@ BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
     allowAnimation: true,
 
-    initialTime: 5000,
-    minimumTime: 750,
+    maxTime: 5000,
+    minTime: 750,
 
     transitionEndEventNames: {
       'WebkitTransition' : 'webkitTransitionEnd',
@@ -72,17 +72,26 @@ BiggerSmaller.Views.TimerView = Backbone.View.extend({
 
     },
 
+    // http://easings.net/#easeOutQuint
+    // t: current time, b: begInnIng value, c: change In value, d: duration
+    easeOutQuint: function (t, b, c, d) {
+      return c*((t=t/d-1)*t*t*t*t + 1) + b;
+    },
+
     getTimer: function(){
-      var reducedTime = this.initialTime * (1-(this.model.get('score')*.1));
-      return Math.max(reducedTime,this.minimumTime);
+      var maxTime = this.maxTime,
+          minTime = this.minTime,
+          maxScore = 30;
+      var score = Math.min(maxScore, this.model.get('score'));
+      return maxTime + minTime - this.easeOutQuint(score, minTime, maxTime-minTime, maxScore);
     },
 
     startTimer: function () {
       var self = this;
-
+      var time = Math.round(this.getTimer());
       this.$el.animate({
         width: 0,
-      }, self.getTimer(), function() {
+      }, time, function() {
         pubSub.trigger("gameOver:timer");
         BiggerSmaller.app.navigate('gameover', {trigger: true});
       });
